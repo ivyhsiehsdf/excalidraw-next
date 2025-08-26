@@ -71,3 +71,38 @@ Strict TypeScript setup with:
 - `checkJs: true` 
 - ESNext module system with bundler resolution
 - Incremental compilation enabled
+
+## Docker Deployment
+
+The application is configured for Docker deployment with multi-stage builds:
+
+### Docker Commands
+
+**Build and run production container:**
+```bash
+docker build -t excalidraw-next .
+docker run -p 3000:3000 excalidraw-next
+```
+
+**Using Docker Compose:**
+```bash
+# Production
+docker-compose up --build
+
+# Development (with hot reloading)
+docker-compose --profile dev up --build app-dev
+```
+
+### Docker Configuration
+
+- **Dockerfile** - Multi-stage production build using Node 20 Alpine and distroless runtime
+- **Dockerfile.dev** - Development container with hot reloading
+- **docker-compose.yml** - Production and development services
+- **Next.js config** - Uses `output: "standalone"` for optimized Docker builds
+
+**Key Docker features:**
+- Environment validation skipped during build (`SKIP_ENV_VALIDATION=1`)
+- Non-root user for security
+- Health checks included
+- Optimized layer caching
+- Distroless runtime image for minimal attack surface

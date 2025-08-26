@@ -11,7 +11,7 @@ const Excalidraw = dynamic(
 
 export default function Home() {
   const [jsonData, setJsonData] = useState("");
-  const [currentData, setCurrentData] = useState(null);
+  const [currentData, setCurrentData] = useState<any>(null);
   const [showForm, setShowForm] = useState(true);
 
   const defaultJsonObj = {
