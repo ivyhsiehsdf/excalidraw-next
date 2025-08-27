@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import "@excalidraw/excalidraw/index.css";
@@ -10,7 +10,7 @@ const Excalidraw = dynamic(
   { ssr: false }
 );
 
-export default function MermaidPage() {
+function MermaidPageContent() {
   const searchParams = useSearchParams();
   const [mermaidInput, setMermaidInput] = useState("");
   const [fontSize, setFontSize] = useState(16);
@@ -396,5 +396,24 @@ ${defaultMermaid}`}
       )}
     </div>
     </>
+  );
+}
+
+export default function MermaidPage() {
+  return (
+    <Suspense fallback={
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Loading...
+      </div>
+    }>
+      <MermaidPageContent />
+    </Suspense>
   );
 }
