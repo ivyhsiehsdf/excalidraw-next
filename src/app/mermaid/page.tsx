@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import "@excalidraw/excalidraw/index.css";
 
@@ -12,6 +12,7 @@ const Excalidraw = dynamic(
 
 function MermaidPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [mermaidInput, setMermaidInput] = useState("");
   const [fontSize, setFontSize] = useState(16);
   const [excalidrawData, setExcalidrawData] = useState<any>(null);
@@ -104,6 +105,13 @@ function MermaidPageContent() {
         return;
       }
 
+      // Get the new ID from the response
+      const responseData = await response.json();
+      const newId = responseData.id;
+
+      // Update the URL with the new ID
+      router.push(`/mermaid?id=${newId}`, { scroll: false });
+
       // Now do the client-side conversion
       const { parseMermaidToExcalidraw } = await import("@excalidraw/mermaid-to-excalidraw");
       const { convertToExcalidrawElements } = await import("@excalidraw/excalidraw");
@@ -160,6 +168,13 @@ function MermaidPageContent() {
         alert(`Failed to validate: ${errorData.error}`);
         return;
       }
+
+      // Get the new ID from the response
+      const responseData = await response.json();
+      const newId = responseData.id;
+
+      // Update the URL with the new ID
+      router.push(`/mermaid?id=${newId}`, { scroll: false });
 
       // Client-side conversion
       const { parseMermaidToExcalidraw } = await import("@excalidraw/mermaid-to-excalidraw");
