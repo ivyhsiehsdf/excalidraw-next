@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import "@excalidraw/excalidraw/index.css";
 
@@ -10,6 +11,7 @@ const Excalidraw = dynamic(
 );
 
 export default function MermaidPage() {
+  const searchParams = useSearchParams();
   const [mermaidInput, setMermaidInput] = useState("");
   const [fontSize, setFontSize] = useState(16);
   const [excalidrawData, setExcalidrawData] = useState<any>(null);
@@ -23,6 +25,59 @@ export default function MermaidPage() {
     C -->|No| E[Action 2]
     D --> F[End]
     E --> F`;
+
+  // Load Mermaid data from URL parameter if present
+  useEffect(() => {
+    const id = searchParams.get('id');
+    if (id) {
+      loadMermaidFromId(id);
+    }
+  }, [searchParams]);
+
+  const loadMermaidFromId = async (id: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/mermaid2excalidraw?id=${id}`);
+      if (!response.ok) {
+        alert('Failed to load Mermaid diagram. The link may be invalid or expired.');
+        return;
+      }
+
+      const data = await response.json();
+      setMermaidInput(data.mermaid);
+      setFontSize(data.fontSize);
+
+      // Automatically convert to Excalidraw
+      const { parseMermaidToExcalidraw } = await import("@excalidraw/mermaid-to-excalidraw");
+      const { convertToExcalidrawElements } = await import("@excalidraw/excalidraw");
+
+      const { elements, files } = await parseMermaidToExcalidraw(data.mermaid, {
+        fontSize: data.fontSize,
+      });
+
+      const excalidrawElements = convertToExcalidrawElements(elements);
+
+      const excalidrawData = {
+        type: "excalidraw",
+        version: 2,
+        source: "https://excalidraw.com",
+        elements: excalidrawElements,
+        appState: {
+          gridSize: null,
+          viewBackgroundColor: "#ffffff",
+        },
+        files: files || {},
+      };
+
+      setExcalidrawData(excalidrawData);
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error loading Mermaid data:', error);
+      alert('Error loading Mermaid diagram from URL.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,15 +189,58 @@ export default function MermaidPage() {
     }
   };
 
-  if (showForm) {
-    return (
+  // Loading overlay component
+  const LoadingOverlay = () => (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 9999,
+      backdropFilter: 'blur(2px)'
+    }}>
       <div style={{
-        padding: '20px',
-        maxWidth: '800px',
-        margin: '0 auto',
+        width: '50px',
+        height: '50px',
+        border: '4px solid #f3f3f3',
+        borderTop: '4px solid #007cba',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite'
+      }}></div>
+      <p style={{
+        marginTop: '20px',
+        fontSize: '16px',
+        color: '#666',
         fontFamily: 'system-ui, sans-serif'
       }}>
-        <h1>Mermaid to Excalidraw Converter</h1>
+        Converting Mermaid diagram...
+      </p>
+      <style jsx>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+
+  if (showForm) {
+    return (
+      <>
+        {isLoading && <LoadingOverlay />}
+        <div style={{
+          padding: '20px',
+          maxWidth: '800px',
+          margin: '0 auto',
+          fontFamily: 'system-ui, sans-serif'
+        }}>
+          <h1>Mermaid to Excalidraw Converter</h1>
         <p>Enter your Mermaid diagram syntax below and convert it to an interactive Excalidraw diagram:</p>
 
         <form onSubmit={handleSubmit}>
@@ -266,34 +364,15 @@ ${defaultMermaid}`}
     }`}</pre>
           </details>
         </div>
-      </div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div style={{ height: '100vh', width: '100vw', position: 'relative' }}>
-      <div style={{
-        position: 'absolute',
-        top: '10px',
-        left: '10px',
-        zIndex: 1000,
-        display: 'flex',
-        gap: '10px'
-      }}>
-        <button
-          onClick={() => setShowForm(true)}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: '#007cba',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Back to Form
-        </button>
-      </div>
+    <>
+      {isLoading && <LoadingOverlay />}
+      <div style={{ height: '100vh', width: '100vw', position: 'relative' }}>
 
       {excalidrawData ? (
         <Excalidraw initialData={excalidrawData} />
@@ -310,5 +389,6 @@ ${defaultMermaid}`}
         </div>
       )}
     </div>
+    </>
   );
 }
