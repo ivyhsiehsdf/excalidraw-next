@@ -52,7 +52,9 @@ export default function MermaidPage() {
       const { convertToExcalidrawElements } = await import("@excalidraw/excalidraw");
 
       const { elements, files } = await parseMermaidToExcalidraw(data.mermaid, {
-        fontSize: data.fontSize,
+        themeVariables: {
+          fontSize: `${data.fontSize}px`,
+        },
       });
 
       const excalidrawElements = convertToExcalidrawElements(elements);
@@ -107,7 +109,9 @@ export default function MermaidPage() {
       const { convertToExcalidrawElements } = await import("@excalidraw/excalidraw");
 
       const { elements, files } = await parseMermaidToExcalidraw(mermaidInput, {
-        fontSize: fontSize,
+        themeVariables: {
+          fontSize: `${fontSize}px`,
+        },
       });
 
       const excalidrawElements = convertToExcalidrawElements(elements);
@@ -162,7 +166,9 @@ export default function MermaidPage() {
       const { convertToExcalidrawElements } = await import("@excalidraw/excalidraw");
 
       const { elements, files } = await parseMermaidToExcalidraw(defaultMermaid, {
-        fontSize: fontSize,
+        themeVariables: {
+          fontSize: `${fontSize}px`,
+        },
       });
 
       const excalidrawElements = convertToExcalidrawElements(elements);
@@ -197,7 +203,7 @@ export default function MermaidPage() {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backgroundColor: '#ffffff',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
