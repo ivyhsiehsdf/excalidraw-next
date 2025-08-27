@@ -51,7 +51,7 @@ export async function saveMermaidDiagram(mermaidText: string, fontSize: number) 
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to save diagram');
+    throw new Error(errorData.error || '儲存圖表失敗');
   }
 
   return await response.json();
@@ -62,9 +62,9 @@ export async function loadMermaidDiagram(id: string): Promise<MermaidData> {
   
   if (!response.ok) {
     if (response.status === 404) {
-      throw new Error('Mermaid diagram not found. The link may be invalid or expired.');
+      throw new Error('找不到 Mermaid 圖表。連結可能無效或已過期。');
     }
-    throw new Error('Failed to load Mermaid diagram.');
+    throw new Error('載入 Mermaid 圖表失敗。');
   }
 
   return await response.json();

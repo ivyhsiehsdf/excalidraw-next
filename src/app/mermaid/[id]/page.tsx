@@ -55,49 +55,54 @@ function MermaidViewerContent() {
 
   return (
     <>
-      {isLoading && <LoadingOverlay message="Loading Mermaid diagram..." />}
+      {isLoading && <LoadingOverlay message="載入 Mermaid 圖表中..." />}
       <div style={{ height: '100vh', width: '100vw', position: 'relative' }}>
-        {/* Navigation Bar */}
+        {/* Navigation Bar - Bottom Center */}
         <div style={{
           position: 'absolute',
-          top: '10px',
-          left: '10px',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
           zIndex: 1000,
           display: 'flex',
-          gap: '10px'
+          gap: '15px'
         }}>
           <button
             onClick={() => router.push('/mermaid')}
             style={{
-              padding: '8px 15px',
+              padding: '12px 20px',
               backgroundColor: '#007cba',
               color: 'white',
               border: 'none',
-              borderRadius: '4px',
+              borderRadius: '6px',
               cursor: 'pointer',
-              fontSize: '14px'
+              fontSize: '16px',
+              fontWeight: '500',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
             }}
           >
-            Create New
+            建立新的
           </button>
           <button
             onClick={() => router.push(`/mermaid/${params.id}/modify`)}
             style={{
-              padding: '8px 15px',
+              padding: '12px 20px',
               backgroundColor: '#28a745',
               color: 'white',
               border: 'none',
-              borderRadius: '4px',
+              borderRadius: '6px',
               cursor: 'pointer',
-              fontSize: '14px'
+              fontSize: '16px',
+              fontWeight: '500',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
             }}
           >
-            Modify
+            編輯
           </button>
         </div>
 
         {excalidrawData ? (
-          <Excalidraw initialData={excalidrawData} />
+          <Excalidraw initialData={excalidrawData} langCode="zh-TW" />
         ) : (
           !isLoading && (
             <div style={{
@@ -108,7 +113,7 @@ function MermaidViewerContent() {
               fontSize: '18px',
               color: '#666'
             }}>
-              No diagram data available.
+              無可用的圖表資料。
             </div>
           )
         )}
@@ -128,7 +133,7 @@ export default function MermaidViewerPage() {
         fontSize: '18px',
         color: '#666'
       }}>
-        Loading...
+        載入中...
       </div>
     }>
       <MermaidViewerContent />

@@ -25,7 +25,7 @@ export function ErrorDisplay({ error, onCreateNew, onSecondaryAction, secondaryA
         marginBottom: '20px',
         textAlign: 'center'
       }}>
-        <h2 style={{ margin: '0 0 10px 0' }}>Error</h2>
+        <h2 style={{ margin: '0 0 10px 0' }}>錯誤</h2>
         <p style={{ margin: '0' }}>{error}</p>
       </div>
       <div>
@@ -41,7 +41,7 @@ export function ErrorDisplay({ error, onCreateNew, onSecondaryAction, secondaryA
             marginRight: '10px'
           }}
         >
-          Create New Diagram
+          建立新圖表
         </button>
         <button
           onClick={onSecondaryAction}

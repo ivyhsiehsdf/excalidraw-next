@@ -16,7 +16,7 @@ interface MermaidData {
 
 async function storeInKV(key: string, value: MermaidData): Promise<void> {
   const kvUrl = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/storage/kv/namespaces/${env.CLOUDFLARE_KV_NAMESPACE_ID}/values/${key}`;
-  
+
   const response = await fetch(kvUrl, {
     method: 'PUT',
     headers: {
@@ -33,7 +33,7 @@ async function storeInKV(key: string, value: MermaidData): Promise<void> {
 
 async function getFromKV(key: string): Promise<MermaidData | null> {
   const kvUrl = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/storage/kv/namespaces/${env.CLOUDFLARE_KV_NAMESPACE_ID}/values/${key}`;
-  
+
   const response = await fetch(kvUrl, {
     headers: {
       'Authorization': `Bearer ${env.CLOUDFLARE_API_TOKEN}`,
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     // Get the host from the request to build the URL
     const host = request.headers.get('host') ?? 'localhost:3000';
     const protocol = request.headers.get('x-forwarded-proto') ?? 'http';
-    const clientUrl = `${protocol}://${host}/mermaid?id=${id}`;
+    const clientUrl = `${protocol}://${host}/mermaid/${id}`;
 
     return NextResponse.json({
       id,
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error retrieving Mermaid data:", error);
-    
+
     if (error instanceof Error && error.message.includes('Failed to retrieve from KV')) {
       return NextResponse.json(
         { error: "Failed to retrieve data" },

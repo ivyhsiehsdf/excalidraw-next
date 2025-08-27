@@ -46,7 +46,7 @@ function MermaidModifyContent() {
       router.push(`/mermaid/${responseData.id}`);
     } catch (error) {
       console.error('Save error:', error);
-      alert(`Error saving Mermaid diagram: ${error instanceof Error ? error.message : 'Please check your syntax and try again.'}`);
+      alert(`儲存 Mermaid 圖表時發生錯誤：${error instanceof Error ? error.message : '請檢查您的語法並重試。'}`);
     } finally {
       setIsLoading(false);
     }
@@ -63,15 +63,15 @@ function MermaidModifyContent() {
         error={error}
         onCreateNew={() => router.push('/mermaid')}
         onSecondaryAction={() => router.push(`/mermaid/${params.id}`)}
-        secondaryActionText="Back to View"
+        secondaryActionText="返回檢視"
       />
     );
   }
 
   return (
     <>
-      {isLoadingData && <LoadingOverlay message="Loading diagram for editing..." />}
-      {isLoading && <LoadingOverlay message="Saving changes..." />}
+      {isLoadingData && <LoadingOverlay message="載入圖表以供編輯..." />}
+      {isLoading && <LoadingOverlay message="儲存變更中..." />}
       
       <div style={{
         padding: '20px',
@@ -88,7 +88,7 @@ function MermaidModifyContent() {
           paddingBottom: '15px',
           borderBottom: '1px solid #ddd'
         }}>
-          <h1>Modify Mermaid Diagram</h1>
+          <h1>修改 Mermaid 圖表</h1>
           <div>
             <button
               onClick={() => router.push(`/mermaid/${params.id}`)}
@@ -102,7 +102,7 @@ function MermaidModifyContent() {
                 marginRight: '10px'
               }}
             >
-              Back to View
+              返回檢視
             </button>
             <button
               onClick={() => router.push('/mermaid')}
@@ -115,17 +115,17 @@ function MermaidModifyContent() {
                 cursor: 'pointer'
               }}
             >
-              Create New
+              建立新的
             </button>
           </div>
         </div>
 
-        <p>Modify your Mermaid diagram syntax below. Changes will create a new version with a new URL.</p>
+        <p>在下方修改您的 Mermaid 圖表語法。變更將建立一個具有新 URL 的新版本。</p>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '15px' }}>
             <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-              Font Size:
+              字型大小：
             </label>
             <input
               type="number"
@@ -145,7 +145,7 @@ function MermaidModifyContent() {
           <textarea
             value={mermaidInput}
             onChange={(e) => setMermaidInput(e.target.value)}
-            placeholder={`Enter your Mermaid syntax here, for example:
+            placeholder={`請在此輸入您的 Mermaid 語法，例如：
 ${DEFAULT_MERMAID}`}
             style={{
               width: '100%',
@@ -173,7 +173,7 @@ ${DEFAULT_MERMAID}`}
                 marginRight: '10px'
               }}
             >
-              {isLoading ? 'Saving...' : 'Save as New Version'}
+              {isLoading ? '儲存中...' : '儲存為新版本'}
             </button>
 
             <button
@@ -189,7 +189,7 @@ ${DEFAULT_MERMAID}`}
                 cursor: (isLoading || isLoadingData) ? 'not-allowed' : 'pointer'
               }}
             >
-              Cancel
+              取消
             </button>
           </div>
         </form>
@@ -204,7 +204,7 @@ ${DEFAULT_MERMAID}`}
           border: '1px solid #bee5eb'
         }}>
           <p style={{ margin: '0', color: '#0c5460' }}>
-            <strong>Note:</strong> Modifications create a new version with a new URL. The original diagram will remain unchanged at its current URL.
+            <strong>注意：</strong> 修改會建立一個具有新 URL 的新版本。原始圖表將在其目前的 URL 保持不變。
           </p>
         </div>
       </div>
@@ -223,7 +223,7 @@ export default function MermaidModifyPage() {
         fontSize: '18px',
         color: '#666'
       }}>
-        Loading...
+        載入中...
       </div>
     }>
       <MermaidModifyContent />

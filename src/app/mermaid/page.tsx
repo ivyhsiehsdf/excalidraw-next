@@ -21,7 +21,7 @@ function MermaidPageContent() {
       router.push(`/mermaid/${responseData.id}`);
     } catch (error) {
       console.error('Conversion error:', error);
-      alert(`Error converting Mermaid diagram: ${error instanceof Error ? error.message : 'Please check your syntax and try again.'}`);
+      alert(`轉換 Mermaid 圖表時發生錯誤：${error instanceof Error ? error.message : '請檢查您的語法並重試。'}`);
     } finally {
       setIsLoading(false);
     }
@@ -36,7 +36,7 @@ function MermaidPageContent() {
       router.push(`/mermaid/${responseData.id}`);
     } catch (error) {
       console.error('Conversion error:', error);
-      alert(`Error loading default example: ${error instanceof Error ? error.message : 'Please try again.'}`);
+      alert(`載入預設範例時發生錯誤：${error instanceof Error ? error.message : '請重試。'}`);
     } finally {
       setIsLoading(false);
     }
@@ -44,20 +44,20 @@ function MermaidPageContent() {
 
   return (
     <>
-      {isLoading && <LoadingOverlay message="Converting Mermaid diagram..." />}
+      {isLoading && <LoadingOverlay message="轉換 Mermaid 圖表中..." />}
       <div style={{
         padding: '20px',
         maxWidth: '800px',
         margin: '0 auto',
         fontFamily: 'system-ui, sans-serif'
       }}>
-        <h1>Mermaid to Excalidraw Converter</h1>
-        <p>Enter your Mermaid diagram syntax below and convert it to an interactive Excalidraw diagram:</p>
+        <h1>Mermaid 轉 Excalidraw 轉換器</h1>
+        <p>請在下方輸入您的 Mermaid 圖表語法，並將其轉換為互動式 Excalidraw 圖表：</p>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '15px' }}>
             <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-              Font Size:
+              字型大小：
             </label>
             <input
               type="number"
@@ -77,7 +77,7 @@ function MermaidPageContent() {
           <textarea
             value={mermaidInput}
             onChange={(e) => setMermaidInput(e.target.value)}
-            placeholder={`Enter your Mermaid syntax here, for example:
+            placeholder={`請在此輸入您的 Mermaid 語法，例如：
 ${DEFAULT_MERMAID}`}
             style={{
               width: '100%',
@@ -105,7 +105,7 @@ ${DEFAULT_MERMAID}`}
                 marginRight: '10px'
               }}
             >
-              {isLoading ? 'Converting...' : 'Convert to Excalidraw'}
+              {isLoading ? '轉換中...' : '轉換為 Excalidraw'}
             </button>
 
             <button
@@ -122,7 +122,7 @@ ${DEFAULT_MERMAID}`}
                 marginRight: '10px'
               }}
             >
-              Use Default Example
+              使用預設範例
             </button>
 
           </div>

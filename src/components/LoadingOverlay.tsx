@@ -2,7 +2,7 @@ interface LoadingOverlayProps {
   message?: string;
 }
 
-export function LoadingOverlay({ message = "Loading..." }: LoadingOverlayProps) {
+export function LoadingOverlay({ message = "載入中..." }: LoadingOverlayProps) {
   return (
     <div style={{
       position: 'fixed',
